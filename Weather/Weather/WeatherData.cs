@@ -1,4 +1,6 @@
-﻿namespace Weather
+﻿using System;
+
+namespace Weather
 {
     public class WeatherData
     {
@@ -6,38 +8,27 @@
         private readonly StatisticsDisplay statisticsDisplay;
         private readonly ForecastDisplay forecastDisplay;
 
-        public WeatherData()
+        public double Pressure { get; set; }
+        public double Humidity { get; set; }
+        public double Temperature { get; set; }
+
+        public WeatherData(CurrentConditionsDisplay currentConditionsDisplay, StatisticsDisplay statisticsDisplay, ForecastDisplay forecastDisplay)
         {
-            currentConditionsDisplay = new CurrentConditionsDisplay();
-            statisticsDisplay = new StatisticsDisplay();
-            forecastDisplay = new ForecastDisplay();
+            this.currentConditionsDisplay = currentConditionsDisplay;
+            this.statisticsDisplay = statisticsDisplay;
+            this.forecastDisplay = forecastDisplay;
         }
 
-        public void MeasurementsChanged()
+        public void MeasurementsChanged(DateTime currentTime)
         {
-            var temp = GetTemperature();
-            var humidity = GetHumidity();
-            var pressure = GetPressure();
+            var temp = Temperature;
+            var humidity = Humidity;
+            var pressure = Pressure;
+            var updatedTime = currentTime;
 
-            currentConditionsDisplay.Update(temp, humidity, pressure);
-            statisticsDisplay.Update(temp, humidity, pressure);
-            forecastDisplay.Update(temp, humidity, pressure);
-
-        }
-
-        private double GetPressure()
-        {
-            return 20.00D;
-        }
-
-        private double GetHumidity()
-        {
-            return 10.00D;
-        }
-
-        private double GetTemperature()
-        {
-            return 5.00D;
+            currentConditionsDisplay.Update(temp, humidity, pressure, updatedTime);
+            statisticsDisplay.Update(temp, humidity, pressure, updatedTime);
+            forecastDisplay.Update(temp, humidity, pressure, updatedTime);
         }
     }
 }
